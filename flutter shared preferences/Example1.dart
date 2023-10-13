@@ -26,21 +26,17 @@ class _MyAppState extends State<MyApp> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       data = (prefs.getString("data") ?? "hello");
-      textController.text = data; // Update the input field text
+      textController.text = data; 
     });
   }
 
-  Future<void> setdata(String val) async {
+
+  void handleButtonPress() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      data = val;
-      prefs.setString("data", val);
+      data = textController.text; // read the content in the input field.
+      prefs.setString("data", textController.text);  // set the data to shared preferences.
     });
-  }
-
-  void handleButtonPress() {
-    String inputData = textController.text;
-    setdata(inputData);
   }
 
   @override
@@ -57,13 +53,7 @@ class _MyAppState extends State<MyApp> {
               Text("hello $data"),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.text,
-                  controller: textController,
-                ),
+                child: TextField(controller: textController),
               ),
               ElevatedButton(
                 onPressed: handleButtonPress,
