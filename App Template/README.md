@@ -6,3 +6,6 @@
 ![ListView](https://github.com/KKBUGHUNTER/Flutter/assets/91019132/328991fa-1386-4438-a818-45330fbbff52)
 # [04 Menu bar - Code](https://github.com/KKBUGHUNTER/Flutter/tree/main/App%20Template/Menu%20bar)
 ![Menu bar](https://github.com/KKBUGHUNTER/Flutter/assets/91019132/249ac59c-3810-4b59-abd0-bf3ea8df5408)
+# [05 Home Screen](https://github.com/KKBUGHUNTER/Flutter/blob/main/App%20Template/HomeScreen.dart)
+![Home Page1](https://github.com/KKBUGHUNTER/Flutter/assets/91019132/d23dc7e0-7af5-417a-a357-af41fd3fdf35)
+![Home page2](https://github.com/KKBUGHUNTER/Flutter/assets/91019132/a1c7ab8a-c043-4dfb-b615-106041539ad0)
