@@ -11,14 +11,9 @@ main() {
   myinformation();
 }
 
-void myfunction() {
-  var value = "my value inside the my function";
-  print(value);
-}
+void myfunction() => print("my value inside the my function");
 
-String getmyfullname(String firstname, String lastname) {
-  return firstname + " " + lastname;
-}
+String getmyfullname(String firstname, String lastname) =>  firstname + " " + lastname;
 
 int getmyage(int year, int current_year) {
   if (current_year > year)
