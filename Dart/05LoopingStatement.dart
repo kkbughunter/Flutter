@@ -1,5 +1,4 @@
 // Looping and Control Statements in Dart
-import 'dart:io';
 
 void main()
 {
