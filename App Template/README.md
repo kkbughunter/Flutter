@@ -7,4 +7,5 @@
 | # [05 Home Screen](https://github.com/KKBUGHUNTER/Flutter/blob/main/App%20Template/HomeScreen.dart)|![Home Page1](https://github.com/KKBUGHUNTER/Flutter/assets/91019132/d23dc7e0-7af5-417a-a357-af41fd3fdf35)
 
 # [06 Flutter CRUD App](https://github.com/KKBUGHUNTER/Flutter/blob/main/App%20Template/FlutterCRUD.dart)
+# [06 Shared Preferences CRUD App](https://github.com/KKBUGHUNTER/Flutter/blob/main/App%20Template/shared_preferences_Simple_CRUD_App.dart)
 [Flutter CRUD demo.webm](https://github.com/KKBUGHUNTER/Flutter/assets/91019132/43c68a4e-d0e8-4059-8d1a-2a708f3a6e80)
