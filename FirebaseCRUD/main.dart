@@ -94,8 +94,7 @@ class _TaskPageState extends State<TaskPage> {
   void listenForData() {
     ref.onValue.listen((event) {
       var snapshot = event.snapshot;
-      List<dynamic> data = snapshot.value as List<dynamic>;
-      print(data);
+      print(snapshot.value);
     }, onError: (Object error) {
       print('Error listening for data: $error');
     });
@@ -104,8 +103,9 @@ class _TaskPageState extends State<TaskPage> {
   Future<void> readDataOnce() async {
     try {
       DataSnapshot snapshot = await ref.get();
-      List<dynamic> data = snapshot.value as List<dynamic>;
-      print(data);
+      print(snapshot.value);
+      // List<dynamic> data = snapshot.value as List<dynamic>;
+      // print(data);
     } catch (e) {
       print('Error reading data: $e');
     }
