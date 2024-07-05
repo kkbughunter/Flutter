@@ -19,6 +19,7 @@ void main() async {
   runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,24 @@ class _TaskPageState extends State<TaskPage> {
   void listenForData() {
     ref.onValue.listen((event) {
       var snapshot = event.snapshot;
-      print(snapshot.value);
+      var data = snapshot.value;
+
+      if (data is List) {
+        List<dynamic> dataList = data as List<dynamic>;
+        for (int index = 0; index < dataList.length; index++) {
+          var value = dataList[index];
+          if (value != null) {
+            print('ID: $index, Name: $value');
+          }
+        }
+      } else if (data is Map) {
+        Map<dynamic, dynamic> dataMap = data as Map<dynamic, dynamic>;
+        dataMap.forEach((key, value) {
+          print('ID: $key, Name: $value');
+        });
+      } else {
+        print('No data available');
+      }
     }, onError: (Object error) {
       print('Error listening for data: $error');
     });
@@ -104,8 +122,22 @@ class _TaskPageState extends State<TaskPage> {
     try {
       DataSnapshot snapshot = await ref.get();
       print(snapshot.value);
-      // List<dynamic> data = snapshot.value as List<dynamic>;
-      // print(data);
+      if (snapshot.value is List) {
+        List<dynamic> dataList = snapshot.value as List<dynamic>;
+        for (int index = 0; index < dataList.length; index++) {
+          var data = dataList[index];
+          if (data != null) {
+            print('ID: $index, Name: $data');
+          }
+        }
+      } else if (snapshot.value is Map) {
+        Map<dynamic, dynamic> dataMap = snapshot.value as Map<dynamic, dynamic>;
+        dataMap.forEach((key, value) {
+          print('ID: $key, Name: $value');
+        });
+      } else {
+        print('No data available');
+      }
     } catch (e) {
       print('Error reading data: $e');
     }
