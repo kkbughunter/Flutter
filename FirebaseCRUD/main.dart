@@ -1,100 +1,122 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'firebase_options.dart'; // Ensure you have this file correctly set up with your Firebase config
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: FirebaseOptions(
+      databaseURL:
+          "https://xyz-default-rtdb.asia-southeast1.firebasedatabase.app/",  //  Add the RTDB Database URL
+      apiKey: "xyz",
+      authDomain: "xyz.firebaseapp.com",
+      projectId: "xyz",
+      storageBucket: "xyz.appspot.com",
+      messagingSenderId: "xyz",
+      appId: "xyz",
+    ),
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Database Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(),
+      home: TaskPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
+class TaskPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _TaskPageState createState() => _TaskPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final _messagesRef = FirebaseDatabase.instance.ref('messages');
-  final _userInputController = TextEditingController();
+class _TaskPageState extends State<TaskPage> {
+  final DatabaseReference ref = FirebaseDatabase.instance.ref('nameList');
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _idController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Database Example'),
+        title: Text('Task Manager'),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _userInputController,
-            decoration: const InputDecoration(
-              labelText: 'Enter data to insert',
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _idController,
+              decoration: InputDecoration(labelText: 'ID'),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (_userInputController.text.isNotEmpty) {
-                _insertData(_userInputController.text);
-                _userInputController.clear();
-              }
-            },
-            child: const Text('Insert Data'),
-          ),
-          Flexible(
-            child: FirebaseAnimatedList(
-              key: const ValueKey<int>(0), // Unique key for the list
-              query: _messagesRef,
-              itemBuilder: (context, snapshot, animation, index) {
-                return SizeTransition(
-                  sizeFactor: animation,
-                  child: ListTile(
-                    trailing: IconButton(
-                      onPressed: () => _deleteMessage(snapshot),
-                      icon: const Icon(Icons.delete),
-                    ),
-                    title: Text('$index: ${snapshot.value}'),
-                  ),
-                );
-              },
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Your name'),
             ),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: () =>
+                  _addData(_idController.text, _nameController.text),
+              child: Text('Add Task'),
+            ),
+            ElevatedButton(
+              onPressed: listenForData,
+              child: Text('Listen for Data'),
+            ),
+            ElevatedButton(
+              onPressed: readDataOnce,
+              child: Text('Read Data Once'),
+            ),
+            ElevatedButton(
+              onPressed: () => _deleteData(_idController.text),
+              child: Text('Delete Task'),
+            ),
+            ElevatedButton(
+              onPressed: () =>
+                  _updateData(_idController.text, _nameController.text),
+              child: Text('Update Task'),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _insertData(String data) async {
+  void _addData(String id, String name) {
+    ref.child(id).set(name);
+    _nameController.clear();
+    _idController.clear();
+  }
+
+  void listenForData() {
+    ref.onValue.listen((event) {
+      var snapshot = event.snapshot;
+      List<dynamic> data = snapshot.value as List<dynamic>;
+      print(data);
+    }, onError: (Object error) {
+      print('Error listening for data: $error');
+    });
+  }
+
+  Future<void> readDataOnce() async {
     try {
-      final newMessageRef = _messagesRef.push();
-      await newMessageRef.set(data);
-    } on FirebaseException catch (e) {
-      print("ERROR: ${e.message}");
+      DataSnapshot snapshot = await ref.get();
+      List<dynamic> data = snapshot.value as List<dynamic>;
+      print(data);
+    } catch (e) {
+      print('Error reading data: $e');
     }
   }
 
-  Future<void> _deleteMessage(DataSnapshot snapshot) async {
-    final messageRef = _messagesRef.child(snapshot.key!);
-    await messageRef.remove();
+  void _updateData(String id, String name) {
+    ref.child(id).set(name);
+  }
+
+  void _deleteData(String id) {
+    print(id);
+    ref.child(id).remove();
   }
 }
